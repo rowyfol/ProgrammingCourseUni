@@ -4,112 +4,62 @@
 
 using namespace std;
 
+void WelcomeBanner();
 void FillUpTheMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
 void CreateTransposeOfMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
 bool CheckSymmetricStatus(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
-void AddM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
-void MultiplyM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
+void AddM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int result[][MAX_ARRAY_SIZE_COL], int row, int col);
+void MultiplyM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int result[][MAX_ARRAY_SIZE_COL], int row, int col);
 void PrintMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
-
 
 int main()
 {
-	// get row and col of matrix /////////////////////////
-main:
+	bool ProcessToNextStep = false;
 	int row,col;
-	cout << "Enter the row of matrix: ";
-	cin >> row;
+	do {
+		WelcomeBanner();
+		cout << "----> Enter the row of matrix: ";
+		cin >> row;
 
-	cout << "Enter the column of matrix: ";
-	cin >> col;
+		cout << "----> Enter the column of matrix: ";
+		cin >> col;
 	
-	if (row != col)
-	{
-		cout << "---- Warning ----" << endl;
-		cout << "row and colum must be equal.\nif you want to exit press 0 othervise press any number:";
-		int command;
-		cin >> command;
-		if (command == 0)
+		if (row != col)
 		{
-			return 0;
-		}
-		goto main;
-	}
-
-	//////////////////////////////////////////////////////
-
-	// fill up the matrix ///////////////////////////////
-
-	int matrix[row][col];
-
-	for (int i=0; i < row; i++)
-	{
-		cout << "Row: " << i+1 << endl;
-
-		for (int j=0; j < col; j++)
-		{
-			cout << "Matrix[" << i+1 << "]" << "[" << j+1 << "] : ";
-			cin >> matrix[i][j];
-		}
-	}
-
-	//////////////////////////////////////////////////////
-
-	// create Transpose Matrix //////////////////////////
-
-	int n_matrix[col][row];
-
-	for (int i=0; i < col; i++)
-	{
-		for (int j=0; j < row; j++)
-		{
-			n_matrix[i][j] = matrix[j][i];
-		}
-	}
-
-	//////////////////////////////////////////////////////
-	// check if org. matrix and transpose matrix is equal/
-
-	bool n_equal = false;
-
-	for (int i=0; i < row; i++)
-	{
-		for (int j=0; j < col; j++)
-		{
-			if (matrix[i][j] != n_matrix[i][j])
+			cout << endl << "!!!! Warning !!!!" << endl;
+			cout << "(INFO) row and colum must be equal.\n----> if you want to exit press 0 othervise press any number:";
+			int command;
+			cin >> command;
+			if (command == 0)
 			{
-				n_equal = true;
+				return 0;
 			}
+		} else {
+			ProcessToNextStep = true;
 		}
-	}
+	} while (ProcessToNextStep == false);
 
-	if (n_equal == true)
+	int matrix[row][MAX_ARRAY_SIZE_COL];
+	FillUpTheMatrix(matrix, row, col);
+
+	int n_matrix[col][MAX_ARRAY_SIZE_COL];
+	CreateTransposeOfMatrix(matrix, n_matrix, row, col);
+	PrintMatrix(matrix, row, col);
+	cout << endl;
+	PrintMatrix(n_matrix, row, col);
+	cout << endl;
+
+	if (CheckSymmetricStatus(matrix, n_matrix, row, col) == false)
 	{
-		// Add org. matrix to itself and print the output ////
 		cout << "Matrix is not symmetric. \nrun the operation: Matrix+Marix" << endl;
 		
-		int add_matrix[row][col];
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				add_matrix[i][j] = matrix[i][j] + matrix[i][j];
-			}
-		}
+		int add_matrix[row][MAX_ARRAY_SIZE_COL];
+		AddM(matrix, matrix, add_matrix, row, col);
+		PrintMatrix(add_matrix, row, col);
+		cout << endl;
 
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				cout << add_matrix[i][j] << "\t";
-			}
-			cout << endl;
-		}
 	} else {
-		//////////////////////////////////////////////////////
-		// matrix multiplied by itself and print the output //
-
-		int m_matrix[row][col];
+		int m_matrix[row][MAX_ARRAY_SIZE_COL];
 
 		for (int i = 0; i < row; i++)
 		{
@@ -125,16 +75,97 @@ main:
 			}
 		}
 
-		for (int i = 0; i < row; i++)
-		{
-			for (int j = 0; j < col; j++)
-			{
-				cout << m_matrix[i][j] << "\t";
-			}
-			cout << endl;
-		}
-		cout << endl;
+		PrintMatrix(m_matrix, row, col);
+
 	}
 	
 	return 0;
+}
+
+void WelcomeBanner()
+{
+	cout << R"(
+
+╔╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╗
+╠╬╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╬╣
+╠╣Matrix Calculator╠╣
+╠╣Written By       ╠╣
+╠╣A.N              ╠╣
+╠╬╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╬╣
+╚╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╝
+
+	)" << endl;
+}
+
+
+void FillUpTheMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int row, int col)
+{
+	for (int i=0; i < row; i++)
+	{
+		cout << "Row: " << i+1 << endl;
+
+		for (int j=0; j < col; j++)
+		{
+			cout << "Matrix[" << i+1 << "]" << "[" << j+1 << "] : ";
+			cin >> matrix[i][j];
+		}
+	}
+}
+
+void CreateTransposeOfMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col)
+{
+	for (int i=0; i < col; i++)
+	{
+		for (int j=0; j < row; j++)
+		{
+			n_matrix[i][j] = matrix[j][i];
+		}
+	}
+}
+
+bool CheckSymmetricStatus(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col)
+{
+	bool equal = true;
+
+	for (int i=0; i < row; i++)
+	{
+		for (int j=0; j < col; j++)
+		{
+			if (matrix[i][j] != n_matrix[i][j])
+			{
+				equal = false;
+			}
+		}
+	}
+
+	return equal;
+}
+
+void AddM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int result[][MAX_ARRAY_SIZE_COL], int row, int col)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			result[i][j] = matrix[i][j] + n_matrix[i][j];
+		}
+	}
+}
+
+void MultiplyM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int result[][MAX_ARRAY_SIZE_COL], int row, int col)
+{
+	cout << endl;
+}
+
+void PrintMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int row, int col)
+{
+
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			cout << matrix[i][j] << "\t";
+		}
+		cout << endl;
+	}
 }
