@@ -1,10 +1,21 @@
 #include <iostream>
 
+#define MAX_ARRAY_SIZE_COL 100
+
 using namespace std;
+
+void FillUpTheMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
+void CreateTransposeOfMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
+bool CheckSymmetricStatus(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
+void AddM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
+void MultiplyM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
+void PrintMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int row, int col);
+
 
 int main()
 {
-	main:
+	// get row and col of matrix /////////////////////////
+main:
 	int row,col;
 	cout << "Enter the row of matrix: ";
 	cin >> row;
@@ -25,6 +36,10 @@ int main()
 		goto main;
 	}
 
+	//////////////////////////////////////////////////////
+
+	// fill up the matrix ///////////////////////////////
+
 	int matrix[row][col];
 
 	for (int i=0; i < row; i++)
@@ -38,6 +53,10 @@ int main()
 		}
 	}
 
+	//////////////////////////////////////////////////////
+
+	// create Transpose Matrix //////////////////////////
+
 	int n_matrix[col][row];
 
 	for (int i=0; i < col; i++)
@@ -47,6 +66,9 @@ int main()
 			n_matrix[i][j] = matrix[j][i];
 		}
 	}
+
+	//////////////////////////////////////////////////////
+	// check if org. matrix and transpose matrix is equal/
 
 	bool n_equal = false;
 
@@ -63,6 +85,7 @@ int main()
 
 	if (n_equal == true)
 	{
+		// Add org. matrix to itself and print the output ////
 		cout << "Matrix is not symmetric. \nrun the operation: Matrix+Marix" << endl;
 		
 		int add_matrix[row][col];
@@ -83,6 +106,9 @@ int main()
 			cout << endl;
 		}
 	} else {
+		//////////////////////////////////////////////////////
+		// matrix multiplied by itself and print the output //
+
 		int m_matrix[row][col];
 
 		for (int i = 0; i < row; i++)
