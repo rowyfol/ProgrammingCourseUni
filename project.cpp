@@ -44,14 +44,11 @@ int main()
 
 	int n_matrix[col][MAX_ARRAY_SIZE_COL];
 	CreateTransposeOfMatrix(matrix, n_matrix, row, col);
-	PrintMatrix(matrix, row, col);
-	cout << endl;
-	PrintMatrix(n_matrix, row, col);
-	cout << endl;
+
 
 	if (CheckSymmetricStatus(matrix, n_matrix, row, col) == false)
 	{
-		cout << "Matrix is not symmetric. \nrun the operation: Matrix+Marix" << endl;
+		cout << "!!! Matrix is not symmetric !!! \n----> run the operation: Add matrix to itself" << endl;
 		
 		int add_matrix[row][MAX_ARRAY_SIZE_COL];
 		AddM(matrix, matrix, add_matrix, row, col);
@@ -59,23 +56,10 @@ int main()
 		cout << endl;
 
 	} else {
-		int m_matrix[row][MAX_ARRAY_SIZE_COL];
 
-		for (int i = 0; i < row; i++)
-		{
-			int result = 0;
-			int col_new;
-			for (int j = 0; j < col; j++)
-			{
-				result = result + (matrix[i][j] * matrix[j][i]);
-				if (j < col)
-				{
-					m_matrix[i][j] = result;
-				}
-			}
-		}
-
-		PrintMatrix(m_matrix, row, col);
+		int result[row][MAX_ARRAY_SIZE_COL];
+		MultiplyM(matrix, matrix, result, row, col);
+		PrintMatrix(result, row, col);
 
 	}
 	
@@ -84,17 +68,9 @@ int main()
 
 void WelcomeBanner()
 {
-	cout << R"(
+	// Banner created with this application you can check it out here! ( https://www.asciiart.eu/ascii-draw-studio/app )
 
-╔╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╗
-╠╬╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╬╣
-╠╣Matrix Calculator╠╣
-╠╣Written By       ╠╣
-╠╣A.N              ╠╣
-╠╬╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╬╣
-╚╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╝
-
-	)" << endl;
+	cout << "\n╔╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╗\n╠╬╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╬╣\n╠╣Matrix Calculator╠╣\n╠╣Written By       ╠╣\n╠╣A.N              ╠╣\n╠╬╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╦╬╣\n╚╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╩╝\n" << endl;
 }
 
 
@@ -154,7 +130,17 @@ void AddM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], 
 
 void MultiplyM(int matrix[][MAX_ARRAY_SIZE_COL], int n_matrix[][MAX_ARRAY_SIZE_COL], int result[][MAX_ARRAY_SIZE_COL], int row, int col)
 {
-	cout << endl;
+	for (int i =0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			result[i][j] = 0;
+			for (int k = 0; k < col; k++)
+			{
+				result[i][j] += matrix[i][k] * n_matrix[k][j];
+			}
+		}
+	}
 }
 
 void PrintMatrix(int matrix[][MAX_ARRAY_SIZE_COL], int row, int col)
