@@ -13,6 +13,8 @@ int main()
     int matris_1[satr][soton];
     int matris_2[satr][soton];
 
+
+    cout << "\n\nmatris 1 :" << endl;
     for (int i=0; i < satr; i++)
     {
         cout << "sater: " << i << endl;
@@ -23,6 +25,8 @@ int main()
         }
 
     }
+
+    cout << "\n\nmatris 2:" << endl;
 
     for (int i=0; i < satr; i++)
     {
@@ -40,7 +44,7 @@ int main()
 
     for ( int i =0; i < soton; i++)
     {
-        for (int j=0; i < satr; i++ )
+        for (int j=0; j < satr; j++ )
         {
             tarane_1[i][j] = matris_1[j][i];
             tarane_2[i][j] = matris_2[j][i];
@@ -51,15 +55,17 @@ int main()
 
     for (int i = 0; i < satr; i++)
     {
-        for (int j =0; i < soton; j++)
+        for (int j =0; j < soton; j++)
         {
             output[i][j] = 0;
             for (int k = 0; k < soton; k++)
             {
-                output[i][j] += tarane_1[i][k] * tarane_2[k][j];
+                output[i][j] = output[i][j] + tarane_1[i][k] * tarane_2[k][j];
             }
         }
     }
+
+    cout << "result : \n\n";
 
     for (int i = 0; i < satr; i++)
     {
@@ -70,8 +76,5 @@ int main()
         cout << endl;
     }
     
-    int a;
-    cin >> a; 
-
     return 0;
 }
